@@ -60,8 +60,8 @@ def main():
         help="Number of subprocesses [default: %default]")
     group1.add_option("--featureType", "-t", dest="feature_type", default="gene",
         help=("Feature type to culculate [default: %default]."))
-    group1.add_option("--IDattribute", "-i", dest="id_attribute", default="ID",
-        help=("Id tag for feature in GFF file [default: %default]."))
+    # group1.add_option("--IDattribute", "-i", dest="id_attribute", default="ID",
+    #     help=("Id tag for feature in GFF file [default: %default]."))
     group1.add_option("--cellTAG", dest="cell_tag", default="CB", 
         help="Tag for cell barcodes, turn off with None [default: %default]")
     group1.add_option("--UMItag", dest="UMI_tag", default="None", 
@@ -111,8 +111,8 @@ def main():
     max_FLAG = options.max_FLAG
     
     # load features from GTF file
-    genes = load_genes(options.GFF_file)
-    gene_ids = [g.ID for g in genes]
+    genes = load_genes(options.GFF_file, tranTag="", exonTag="")
+    gene_ids = [g.geneID for g in genes]
     if len(np.unique(gene_ids)) != len(gene_ids):
         gene_ids = ["gene%d" %(x + 1) for x in range(len(genes))]
 
