@@ -23,9 +23,7 @@ START_TIME = time.time()
 
 def show_progress(RV=None):
     global PROCESSED, TOTAL_GENE, START_TIME, FID
-    if RV is None:
-        return RV
-    else:
+    if RV is not None:
         FID.writelines(RV)
     
     PROCESSED += 1
@@ -93,7 +91,7 @@ def main():
     barcodes = np.genfromtxt(options.barcode_file, dtype="str", delimiter="\t")
     barcodes = sorted(list(barcodes))
     cell_tag = options.cell_tag
-    UMI_tag  = options.UMI_tag
+    UMI_tag  = options.UMI_tag if options.UMI_tag.upper() != "NONE" else None
         
     if options.out_dir is None:
         out_dir = os.path.dirname(options.sam_file)
@@ -121,6 +119,8 @@ def main():
     for _gene_id in gene_ids:
         fid.writelines(_gene_id + "\n")
     fid.close()
+    print("[cf-count] Count reads for %d features in %d cells with %d cores." 
+          %(len(gene_ids), len(barcodes), nproc))
 
     fid = open(out_dir + "/barcodes.tsv", "w")
     for _cell_id in barcodes:
@@ -128,16 +128,24 @@ def main():
     fid.close()
 
     global FID, TOTAL_GENE
+    TOTAL_GENE = len(gene_ids)
     FID = open(out_dir + "/matrix.mtx", "w")
 
-    result = []
-    pool = multiprocessing.Pool(processes=nproc)
-    for _gene in genes:
-        result.append(pool.apply_async(feature_count, (sam_file, 
-            barcodes, _gene, cell_tag, UMI_tag, min_MAPQ, max_FLAG, min_LEN), 
-            callback=show_progress))
-    pool.close()
-    pool.join()
+    if nproc > 1:
+        result = []
+        pool = multiprocessing.Pool(processes=nproc)
+        for ii in range(len(genes)):
+            result.append(pool.apply_async(feature_count, (sam_file, 
+                barcodes, genes[ii], ii, cell_tag, UMI_tag, min_MAPQ, max_FLAG, min_LEN), 
+                callback=show_progress))
+        pool.close()
+        pool.join()
+    else:
+        for ii in range(len(genes)):
+            RV = feature_count(sam_file, barcodes, genes[ii], ii, cell_tag, 
+                               UMI_tag, min_MAPQ, max_FLAG, min_LEN)
+            show_progress(RV)
+
     FID.close()
 
     data = np.genfromtxt(out_dir + "/matrix.mtx")
@@ -146,7 +154,7 @@ def main():
         "%" + "%MatrixMarket matrix coordinate integer general\n" + "%\n")
     fid.writelines("%d\t%d\t%d\n" %(len(genes), len(barcodes), data.shape[0]))
     
-    sort_idx = np.argsort(data[:, 0])
+    sort_idx = np.argsort(data[:, 0] * len(barcodes) + data[:, 1])
     for ii in sort_idx:
         fid.writelines("%d\t%d\t%d\n" %(data[ii, 0], data[ii, 1], data[ii, 2]))
     fid.close()
