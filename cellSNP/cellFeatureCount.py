@@ -46,7 +46,7 @@ def main():
     parser = OptionParser()
     parser.add_option("--samFile", "-s", dest="sam_file", default=None,
         help=("Indexed & sorted sam/bam/cram file, possibly from CellRanger."))
-    parser.add_option("--outDri", "-o", dest="out_dir", default=None,
+    parser.add_option("--outDir", "-o", dest="out_dir", default=None,
         help=("Full path for output direcotry [default: $samFile_dir]"))
     parser.add_option("--barcodeFile", "-b", dest="barcode_file", default=None,
         help=("A plain file listing all effective cell barcodes."))
