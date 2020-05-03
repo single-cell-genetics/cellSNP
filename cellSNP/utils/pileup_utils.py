@@ -12,6 +12,7 @@ import sys
 import pysam
 import numpy as np
 from .base_utils import id_mapping, unique_list
+from .cellsnp_utils import get_query_bases, get_query_qualities
 from ..version import __version__
 
 VCF_HEADER = (
@@ -85,20 +86,22 @@ def check_pysam_chrom(samFile, chrom=None):
     CACHE_CHROM = chrom
     CACHE_SAMFILE = samFile
     return samFile, chrom
-
+    
 
 def qual_vector(qual=None, capBQ=45, minBQ=0.25):
     """convert the base call quality score to related values for different genotypes
     http://emea.support.illumina.com/bulletins/2016/04/fastq-files-explained.html
     https://linkinghub.elsevier.com/retrieve/pii/S0002-9297(12)00478-8
     
+    @Note  The parameter "qual" is the qual value that is not the ASCII-encoded values typically seen in 
+           FASTQ or SAM formatted files, so no need to substract 33.
+
     Return: a vector of loglikelihood for 
     AA, AA+AB (doublet), AB, B or E (see Demuxlet paper online methods)
     """
     if qual is None:
         return [0, 0, 0, 0]
-    BQ = ord(qual) - 33
-    BQ = max(min(capBQ, BQ), minBQ)
+    BQ = max(min(capBQ, qual), minBQ)
     P = 0.1**(BQ / 10) # Sanger coding, error probability
     RV = [np.log(1-P), np.log(3/4 - 2/3*P), np.log(1/2 - 1/3*P), np.log(P)]
     return RV
@@ -180,9 +183,9 @@ def fetch_bases(samFile, chrom, POS, cell_tag="CR", UMI_tag="UR", min_MAPQ=20,
         if cell_tag is not None:
             cell_list.append(_read.get_tag(cell_tag))
 
-        _base = _read.query_alignment_sequence[idx].upper()
+        _base = get_query_bases(_read)[idx].upper()
         base_list.append(_base)
-        qual_list.append(_read.qqual[idx])
+        qual_list.append(get_query_qualities(_read)[idx])
     return base_list, qual_list, UMIs_list, cell_list
 
 
