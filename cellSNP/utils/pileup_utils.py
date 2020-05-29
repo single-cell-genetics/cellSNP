@@ -143,6 +143,15 @@ def qual_matrix_to_geno(qual_matrix, base_count, REF, ALT, doublet_GL=False):
 
     return GT_out, PL_out
 
+def fmt_umi_tag(read, cell_tag, umi_tag):
+    """
+    @abstract        Return formatted UMI string according to cell_tag and umi_tag.
+    @param read      An alignment read [AlignmentSegment].
+    @param cell_tag  Cell tag, e.g., "CB". None means do not use cell tag [STR].
+    @param umi_tag   UMI tag, e.g., "UR". Should not be None [STR].
+    @return          A formatted (joined) UMI string used for UMI grouping [STR].
+    """
+    return read.get_tag(cell_tag) + '>' + read.get_tag(umi_tag) if cell_tag is not None else read.get_tag(umi_tag)
 
 def fetch_bases(samFile, chrom, POS, cell_tag="CR", UMI_tag="UR", min_MAPQ=20, 
                 max_FLAG=255, min_LEN=30):
@@ -179,7 +188,7 @@ def fetch_bases(samFile, chrom, POS, cell_tag="CR", UMI_tag="UR", min_MAPQ=20,
             continue
 
         if UMI_tag is not None:
-            UMIs_list.append(_read.get_tag(UMI_tag))
+            UMIs_list.append(fmt_umi_tag(_read, cell_tag, UMI_tag))
         if cell_tag is not None:
             cell_list.append(_read.get_tag(cell_tag))
 
@@ -204,6 +213,7 @@ def filter_reads(read_list, cell_tag="CR", UMI_tag="UR", min_MAPQ=20,
         if UMI_tag is not None and _read.has_tag(UMI_tag) == False: 
             continue
         if UMI_tag is not None:
+            #UMIs_list.append(fmt_umi_tag(_read, cell_tag, UMI_tag))
             UMIs_list.append(_read.get_tag(UMI_tag))
         if cell_tag is not None:
             cell_list.append(_read.get_tag(cell_tag))

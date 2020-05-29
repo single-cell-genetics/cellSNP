@@ -73,7 +73,7 @@ def pileup_bases(pileupColumn, real_POS, cell_tag, UMI_tag, min_MAPQ,
             continue
 
         if UMI_tag is not None:
-            UMIs_list.append(_read.get_tag(UMI_tag))
+            UMIs_list.append(fmt_umi_tag(_read, cell_tag, UMI_tag))
         if cell_tag is not None:
             cell_list.append(_read.get_tag(cell_tag))
             
