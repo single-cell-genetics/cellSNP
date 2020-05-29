@@ -115,7 +115,7 @@ def pileup_regions(samFile, barcodes, out_file=None, chrom=None, cell_tag="CR",
             cell_list, UMIs_list, barcodes)
         
         vcf_line = get_vcf_line(base_merge, base_cells, qual_cells, 
-            pileupcolumn.reference_name, pileupcolumn.pos, min_COUNT, min_MAF,
+            pileupcolumn.reference_name, pileupcolumn.pos + 1, min_COUNT, min_MAF,
             doublet_GL = doublet_GL)
 
         if vcf_line is not None:
