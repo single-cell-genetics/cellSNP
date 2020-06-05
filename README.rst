@@ -46,16 +46,20 @@ line, and add ``-U`` for upgrading:
 
 .. code-block:: bash
 
-  pip install cellSNP
+  pip install -U cellSNP
 
-Alternatively, you can download or clone this repository and type 
-``python setup.py install`` to install. In either case, add ``--user`` if you 
-don't have the permission as a root or for your Python environment.
+Alternatively, you can install from this GitHub repository for latest (often 
+development) version by following command line
 
-From v0.1.0, cellSNP requires pysam>=0.15.2, so make sure you are using 
-the right version of `pysam`. Try `pip uninstall pysam` and then reinstall 
-`pip install -U pysam`
+.. code-block:: bash
 
+  pip install -U git+https://github.com/single-cell-genetics/cellSNP
+
+In either case, if you don't have write permission for your current Python 
+environment, we suggest creating a separate `conda environment`_ or add 
+``--user`` for your current one.
+
+.. _conda environment: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
 
 Quick usage
 -----------
@@ -88,6 +92,7 @@ This mode requires inputting a single bam file with either cell barcoded
 (add `-b`) or a bulk sample:
 
 .. code-block:: bash
+
   # 10x sample with cell barcodes
   cellSNP -s $BAM -b $BARCODE -O $OUT_DIR -p 22 --minMAF 0.1 --minCOUNT 100
 
