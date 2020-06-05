@@ -88,6 +88,7 @@ This mode requires inputting a single bam file with either cell barcoded
 (add `-b`) or a bulk sample:
 
 .. code-block:: bash
+
   # 10x sample with cell barcodes
   cellSNP -s $BAM -b $BARCODE -O $OUT_DIR -p 22 --minMAF 0.1 --minCOUNT 100
 
