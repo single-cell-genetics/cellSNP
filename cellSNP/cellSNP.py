@@ -17,6 +17,9 @@ from .utils.pileup_utils import fetch_positions
 from .utils.pileup_regions import pileup_regions
 from .utils.vcf_utils import load_VCF, merge_vcf, VCF_to_sparseMat
 
+DEF_FLAG_WITH_UMI = 4096       # default value of max_FLAG when using UMIs, i.e., UMI_tag is not None
+DEF_FLAG_WITHOUT_UMI = 255     # default value of max_FLAG when not using UMIs, i.e., UMI_tag is None
+
 START_TIME = time.time()
 
 def show_progress(RV=None):
@@ -77,8 +80,8 @@ def main():
         help="Minimum mapped length for read filtering [default: %default]")
     group2.add_option("--minMAPQ", type="int", dest="min_MAPQ", default=20, 
         help="Minimum MAPQ for read filtering [default: %default]")
-    group2.add_option("--maxFLAG", type="int", dest="max_FLAG", default=255, 
-        help="Maximum FLAG for read filtering [default: %default]")
+    group2.add_option("--maxFLAG", type="int", dest="max_FLAG", default=None, 
+        help="Maximum FLAG for read filtering [default: %d (when use UMI) or %d (otherwise)]" % (DEF_FLAG_WITH_UMI, DEF_FLAG_WITHOUT_UMI))
     
     parser.add_option_group(group1)
     parser.add_option_group(group2)
@@ -194,10 +197,12 @@ def main():
     min_MAF = options.min_MAF
     min_LEN = options.min_LEN
     min_MAPQ = options.min_MAPQ
-    max_FLAG = options.max_FLAG
     min_COUNT = options.min_COUNT
     doubletGL = options.doubletGL
-    
+    max_FLAG = options.max_FLAG
+    if options.max_FLAG is None:
+        max_FLAG = DEF_FLAG_WITHOUT_UMI if UMI_tag is None else DEF_FLAG_WITH_UMI
+
     result, out_files = [], []
     if region_file is None:
         # pileup in each chrom
