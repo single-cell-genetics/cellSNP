@@ -2,6 +2,13 @@
 History
 =======
 
+Release v0.3.1 (22/07/2020)
+===========================
+* turn off the PCR duplicate filtering by default (--maxFLAG), as it is not 
+  well flagged in CellRanger, hence may result in loss of a substantial 
+  fraction of SNPs. 
+
+
 Release v0.3.0 (05/06/2020)
 ===========================
 * fix a bug of using read.qqual and read.query_alignment_sequence in 
