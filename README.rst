@@ -28,15 +28,20 @@ Also, there are two major differences comparing to bcftools mpileup:
    and minor alleles fractions. The idea here is to keep most information of 
    SNPs and the downstream statistical model can take the full use of it.
 
+cellSNP has now a C version named cellsnp-lite_, which is basically more efficient with higher speed and 
+less memory usage while lacking mode 2.
+
+.. _cellsnp-lite: https://github.com/single-cell-genetics/cellsnp-lite
 
 News
 ----
-We have turn off the PCR duplicate filtering by default (--maxFLAG), as it is not well flagged in CellRanger, hence may result in loss of a substantial fraction of SNPs. Please use v0.3.1 or setting --maxFLAG to large number. Credits to [issue](https://github.com/single-cell-genetics/cellSNP/issues/13)
+We have turn off the PCR duplicate filtering by default (--maxFLAG), as it is not well flagged in CellRanger, hence may result in loss of a substantial fraction of SNPs. Please use v0.3.1 or setting --maxFLAG to large number. Credits to issue13_.
 
 All release notes can be found in `doc/release.rst`_.
 
 For computational efficiency, we initialised comments on this: `doc/speed.rst`_
 
+.. _issue13: https://github.com/single-cell-genetics/cellSNP/issues/13
 .. _doc/release.rst: https://github.com/single-cell-genetics/cellSNP/blob/master/doc/release.rst
 .. _doc/speed.rst: https://github.com/single-cell-genetics/cellSNP/blob/master/doc/speed.rst
 
