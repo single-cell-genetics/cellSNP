@@ -108,7 +108,7 @@ def pileup_regions(samFile, barcodes, out_file=None, chrom=None, cell_tag="CR",
             continue
 
         base_list, qual_list, UMIs_list, cell_list = pileup_bases(pileupcolumn, 
-            pileupcolumn.pos, cell_tag, UMI_tag, min_MAPQ, max_FLAG, min_LEN)
+            pileupcolumn.pos + 1, cell_tag, UMI_tag, min_MAPQ, max_FLAG, min_LEN)
         
         if len(base_list) < min_COUNT:
             continue
