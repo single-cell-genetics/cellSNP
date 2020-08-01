@@ -57,8 +57,8 @@ def pileup_bases(pileupColumn, real_POS, cell_tag, UMI_tag, min_MAPQ,
                 idx = _read.positions.index(real_POS-1)
             except:
                 continue
-            _qual = get_query_bases(_read, full_length = False)[idx]
-            _base = get_query_qualities(_read, full_length = False)[idx].upper()
+            _qual = get_query_qualities(_read, full_length = False)[idx]
+            _base = get_query_bases(_read, full_length = False)[idx].upper()
         else:
             query_POS = pileupread.query_position
             _qual = _read.query_qualities[query_POS - 1]
