@@ -2,6 +2,12 @@
 History
 =======
 
+Release v0.3.2 (03/08/2020)
+===========================
+* fix the pos index issue in mode 2 which causes index shift between mode 2
+  and mode 3.
+* fix the misassined base and qual in pileup_bases().
+
 Release v0.3.1 (22/07/2020)
 ===========================
 * turn off the PCR duplicate filtering by default (--maxFLAG), as it is not 
