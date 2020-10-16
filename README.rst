@@ -28,14 +28,20 @@ Also, there are two major differences comparing to bcftools mpileup:
    and minor alleles fractions. The idea here is to keep most information of 
    SNPs and the downstream statistical model can take the full use of it.
 
-cellSNP has now a C version named cellsnp-lite_, which is basically more efficient with higher speed and 
-less memory usage while lacking mode 2.
-
-.. _cellsnp-lite: https://github.com/single-cell-genetics/cellsnp-lite
+cellSNP has now a C version named cellsnp-lite_, which is basically more efficient 
+with higher speed and less memory usage.
 
 News
 ----
-We have turn off the PCR duplicate filtering by default (--maxFLAG), as it is not well flagged in CellRanger, hence may result in loss of a substantial fraction of SNPs. Please use v0.3.1 or setting --maxFLAG to large number. Credits to issue13_.
+We recommend cellsnp-lite instead of cellSNP if you would like to use mode 2. For now, 
+cellSNP mode 2 uses pileup() function of pysam, which would filter duplicates and orphan reads 
+by default and may lead to unexpected coverage reduction in some cases. Compared to cellSNP, 
+cellsnp-lite provides a more flexible reads filtering for mode 2 so you could tune the filtering 
+parameters on your demand.
+
+We have turn off the PCR duplicate filtering by default (--maxFLAG), as it is not well flagged in 
+CellRanger, hence may result in loss of a substantial fraction of SNPs. Please use v0.3.1 or setting 
+--maxFLAG to large number. Credits to issue13_.
 
 All release notes can be found in `doc/release.rst`_.
 
@@ -124,6 +130,12 @@ Nevertheless, for species, e.g., zebrafish, without a good list of common SNPs,
 this strategy is still worth a good try, and it does not take much more time 
 than mode 1.
 
+Update: We recommend cellsnp-lite instead of cellSNP if you would like to use mode 2. For now, 
+cellSNP mode 2 uses pileup() function of pysam, which would filter duplicates and orphan reads 
+by default and may lead to unexpected coverage reduction in some cases. Compared to cellSNP, 
+cellsnp-lite provides a more flexible reads filtering for mode 2 so you could tune the filtering 
+parameters on your demand.
+
 * **Mode 3: pileup a list of SNPs for one or multiple BAM/SAM files**
 
 Use `-R` but not `-b`.
@@ -167,6 +179,7 @@ All releases are included in pypi_. Notes for each release are recorded in
 
 
 .. _vireo: https://github.com/huangyh09/vireo
+.. _cellsnp-lite: https://github.com/single-cell-genetics/cellsnp-lite
 .. _snapshot: https://github.com/huangyh09/cellSNP/blob/master/doc/manual.rst
 .. _pysam: https://github.com/pysam-developers/pysam
 .. _pypi: https://pypi.org/project/cellSNP/
