@@ -51,6 +51,13 @@ For computational efficiency, we initialised comments on this: `doc/speed.rst`_
 .. _doc/release.rst: https://github.com/single-cell-genetics/cellSNP/blob/master/doc/release.rst
 .. _doc/speed.rst: https://github.com/single-cell-genetics/cellSNP/blob/master/doc/speed.rst
 
+Citation
+--------
+
+If you find cellSNP (the predecessor of `cellsnp-lite`_) is useful for your research, please cite:
+
+Xianjie Huang, Yuanhua Huang, Cellsnp-lite: an efficient tool for genotyping single cells, Bioinformatics, 2021;, btab358, https://doi.org/10.1093/bioinformatics/btab358
+
 Installation
 ------------
 
